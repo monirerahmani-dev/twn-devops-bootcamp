@@ -28,3 +28,18 @@
       unarchive:
         src: /home/monire/bootcamp/ansible/node/nodejs-app/nodejs-app-1.0.0.tgz
         dest: /home/node
+    - name: Install dependencies
+      npm:
+        path: /home/node/package
+        # path: /root/package
+    - name: Start the apllication
+      command:
+        chdir: /home/node/package/app
+        # chdir: /root/package/app
+        cmd: node server
+      async: 1000
+      poll: 0
+    - name: Ensure app is running
+      shell: ps aux | grep node
+      register: app_status
+    - debug: msg={{app_status}}
