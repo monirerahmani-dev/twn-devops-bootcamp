@@ -1,0 +1,35 @@
+---
+- name: Instal node and npm 
+  hosts: node
+  tasks:
+    - name: Update apt repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Install nodejs and npm
+      apt:
+        pkg:
+          - nodejs
+          - npm
+
+- name: Create new linux user for node app
+  hosts: node
+  tasks:
+    - name: Create linux use
+      user: 
+        name: node
+        comment: Admin
+        group: admin
+
+- name: Deploy nodejs app
+  hosts: node
+  become: True
+  become_user: node
+  tasks:
+    - name: Copy nodejs folder to sever
+      copy:
+        src: /home/monire/bootcamp/ansible/node/nodejs-app/nodejs-app-1.0.0.tgz
+        dest: /root/app-1.0.0.tgz
+    - name: Unpack the nodejs file
+      unarchive:
+        src: /root/app-1.0.0.tgz
+        dest: /root/
+        remote_src: yes
