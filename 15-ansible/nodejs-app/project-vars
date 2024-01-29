@@ -1,0 +1,3 @@
+destination: /home/node
+location: /home/monire/bootcamp/ansible/node/nodejs-app
+version: 1.0.0

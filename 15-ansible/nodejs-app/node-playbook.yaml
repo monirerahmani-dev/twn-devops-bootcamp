@@ -23,11 +23,8 @@
   hosts: node
   become: True
   become_user: node
-  vars:
-    - destination: /home/node
-    - location: /home/monire/bootcamp/ansible/node/nodejs-app
-    - version: 1.0.0
-
+  vars_files:
+    - project-vars
   tasks:
    - name: Copy and Unpack the nodejs file
       unarchive:
