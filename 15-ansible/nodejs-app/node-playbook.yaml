@@ -23,18 +23,23 @@
   hosts: node
   become: True
   become_user: node
+  vars:
+    - destination: /home/node
+    - location: /home/monire/bootcamp/ansible/node/nodejs-app
+    - version: 1.0.0
+
   tasks:
    - name: Copy and Unpack the nodejs file
       unarchive:
-        src: /home/monire/bootcamp/ansible/node/nodejs-app/nodejs-app-1.0.0.tgz
-        dest: /home/node
+        src: "{{location}}/nodejs-app-{{version}}.tgz"
+        dest: "{{destination}}"
     - name: Install dependencies
       npm:
-        path: /home/node/package
+        path: "{{destination}}/package"
         # path: /root/package
     - name: Start the apllication
       command:
-        chdir: /home/node/package/app
+        chdir: "{{destination}}/package/app
         # chdir: /root/package/app
         cmd: node server
       async: 1000
@@ -42,4 +47,4 @@
     - name: Ensure app is running
       shell: ps aux | grep node
       register: app_status
-    - debug: msg={{app_status}}
+    - debug: msg={{app_status.stdout_lines}}
